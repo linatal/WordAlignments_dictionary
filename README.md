@@ -6,8 +6,6 @@ The repository provides scripts for:
 1. preprocessing
 2. word alignment with MGIZA tool
 3. creating a dictionary with most common word alignments
-4. SRL (TODO)
-5. including Verbs from other existing resources (TODO)
 
 ## 1. Preprocessing
 
