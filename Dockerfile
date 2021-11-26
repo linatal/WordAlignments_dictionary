@@ -28,20 +28,23 @@ RUN sed -i "s#~/workspace/boost/boost_1_55_0#/boost_1_55_0#"  /mgiza/mgizapp/man
 RUN /mgiza/mgizapp/manual-compile/compile.sh
 
 RUN cp /mgiza/mgizapp/scripts/merge_alignment.py /mgiza/mgizapp/bin/
-# copy dataset into docker container
+
+# Copy dataset into docker container (only necessary if not mounted)
 COPY ./dataset /mgiza/mgizapp/bin
 
 # Making classes (necessary for algorithm HMM)
 WORKDIR /mgiza/mgizapp/bin
-# ADJUST FROM HERE FILE-NAME:  ./mkcls -n10 -pfilename.src -Vfilename.src.vcb.classes and ./mkcls -n10 -pfilename.trg -Vfilename.trg.vcb.classes
+
+# Adjust filenames:
 RUN  ./mkcls -n10 -pparacrawl.en -Vparacrawl.en.vcb.classes 
 RUN  ./mkcls -n10 -pparacrawl.de -Vparacrawl.de.vcb.classes
-# Translate the corpora into GIZA format
+
+# Translate corpus into GIZA format
 RUN ./plain2snt paracrawl.en paracrawl.de
 # Create the cooccurence
 RUN ./snt2cooc paracrawl.en_paracrawl.de.cooc paracrawl.en.vcb paracrawl.de.vcb paracrawl.en_paracrawl.de.snt
 
-# config file
+# Copy and use config file
 COPY ./configfile.txt ./
 RUN ./mgiza configfile.txt
 
