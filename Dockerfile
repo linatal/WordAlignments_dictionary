@@ -11,6 +11,8 @@ RUN apt-get update && apt-get -y upgrade
 # Install some necessary tools.
 RUN apt-get install -y sudo nano perl python-dev python3-dev python3-pip curl wget tar 
 RUN pip3 install dtrx
+ADD requirements.txt .
+RUN pip3 install -r requirements.txt    	 	    
 
 # Install Moses dependencies.
 RUN apt-get install -y libboost-all-dev
@@ -46,6 +48,7 @@ RUN ./snt2cooc paracrawl.en_paracrawl.de.cooc paracrawl.en.vcb paracrawl.de.vcb 
 
 # Copy and use config file
 COPY ./configfile.txt ./
+COPY ./findWord.py ./
 RUN ./mgiza configfile.txt
 
 
