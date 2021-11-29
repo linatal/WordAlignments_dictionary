@@ -79,11 +79,15 @@ python3 findWord.py -c ./output/en_de.dict.A3.final.part000 -w absorb
 
 ## 4. Create Output Files for SynSemClass Project
 
-For the SynSemClass project, we need two output files for one synonym class. The file `createOutputFiles.py` takes the MGIZA output-files and creates: 
+#### Overview and Output Files
 
-1. a list with most common word alignments: `candidate_verbs_{VERB_NAME}_{CLASS_NAME}.txt`
-2. a list with verbs and candidate example sentences:  `candidate_sentences_{EN-VERB_NAME}_{CLASS_NAME}.txt`
-3. logfile `logfile_{classname}_{class_id}.txt`
+For the SynSemClass project, we need two output files for one synonym class. The file `createOutputFiles.py` takes the MGIZA output-file and filtered corpus files and creates: 
+
+1. a file with most common word alignments: `candidate_verbs_{VERB_NAME}_{CLASS_NAME}.txt`
+2. a file with verbs and candidate example sentences:  `candidate_sentences_{EN-VERB_NAME}_{CLASS_NAME}.txt`
+3. a logfile `logfile_{classname}_{class_id}.txt`
+
+
 
 #### Template Command:
 
@@ -109,7 +113,7 @@ python3 createOutputFiles.py \
 --list arrange,assemble,base,build,construct,create,develop
 ```
 
-Explanation:
+#### Explanation Flags:
 
 - -cn, --classname: include verb classname
 
