@@ -60,12 +60,12 @@ If you use the Dockerfile, you need to adjust:
 The file findWord.py takes the MGIZA output-files and creates a table with the most frequent alignments from English to German verbs (threshold 0.2%). You can use the file via CL:  
 
 ```
-python findWord.py -c $MGIZA_OUTPUT_FILE -w $VERB
+python3 findWord.py -c $MGIZA_OUTPUT_FILE -w $VERB
 ```
 
 In our example, searching for the most often German alignments for the verb "absorb":
 
 ```
-python findWord.py -c ./output/en_de.dict.A3.final -w absorb
+python3 findWord.py -c ./output/en_de.dict.A3.final -w absorb
 ```
 
