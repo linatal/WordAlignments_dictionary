@@ -30,7 +30,7 @@ head -n 20000000 paracrawl.en > paracrawl.en
 Filter corpus for lines not ending with a dot (titles, chopped sentences, other parts from websites) and lines including more than one sentence:
 
 ```
-python preproc_paracrawl_server.py --input_src paracrawl.en --input_trg paracrawl.de
+python preproc_paracrawl.py --input_src paracrawl.en --input_trg paracrawl.de
 ```
 
 For further preprocessing (tokenizing and lowercasing) the files we recommend to follow the tutorial: https://fabioticconi.wordpress.com/2011/01/17/how-to-do-a-word-alignment-with-giza-or-mgiza-from-parallel-corpus/.  
@@ -55,9 +55,7 @@ If you use the Dockerfile, you need to adjust:
 
 * Inside `configfile.txt`, you need to adjust the file-names, too. In the line “ncpus”, you can set the number of CPUs you want to use for processing. 
 
-## 3. Creating output files for based on MGIZA output
-
-#### 3.1 Creating a basic output with most common Word Alignments: 
+## 3. Creating a basic output with most common Word Alignments: 
 
 The file findWord.py takes the MGIZA output-files and creates a table with the most frequent alignments from English to German verbs (threshold 0.2%). You can use the file via CL:  
 
