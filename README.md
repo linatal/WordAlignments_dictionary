@@ -30,8 +30,16 @@ head -n 20000000 paracrawl.en > paracrawl.en
 Filter corpus for lines not ending with a dot (titles, chopped sentences, other parts from websites) and lines including more than one sentence:
 
 ```
-python preproc_paracrawl.py --input_src paracrawl.en --input_trg paracrawl.de
+python preprocCorpus.py --input_src $CORPUS_SRC_LANG --input_trg $CORPUS_TRG_LANG
 ```
+
+In our example:
+
+```
+python preprocCorpus.py --input_src paracrawl.en --input_trg paracrawl.de
+```
+
+
 
 For further preprocessing (tokenizing and lowercasing) the files we recommend to follow the tutorial: https://fabioticconi.wordpress.com/2011/01/17/how-to-do-a-word-alignment-with-giza-or-mgiza-from-parallel-corpus/.  
 Save the preprocessed files inside ./dataset folder. 
