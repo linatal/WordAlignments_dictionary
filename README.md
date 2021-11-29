@@ -81,8 +81,11 @@ python3 findWord.py -c ./output/en_de.dict.A3.final.part000 -w absorb
 
 For the SynSemClass project, we need two output files for one synonym class. The file `createOutputFiles.py` takes the MGIZA output-files and creates: 
 
-1. a list with most common word alignments: `new_german_verbs_{VERB_NAME}_{CLASS_NAME}.txt`
-2. a list with verbs and candidate example sentences:  `output_{EN-VERB_NAME}_{CLASS_NAME}.txt`
+1. a list with most common word alignments: `candidate_verbs_{VERB_NAME}_{CLASS_NAME}.txt`
+2. a list with verbs and candidate example sentences:  `candidate_sentences_{EN-VERB_NAME}_{CLASS_NAME}.txt`
+3. logfile `logfile_{classname}_{class_id}.txt`
+
+#### Template Command:
 
 ```
 python3 createOutputFiles.py \
@@ -94,17 +97,19 @@ python3 createOutputFiles.py \
 --ref_verbs $VERBLIST_SRC_LANG # comma-separated verb list without spaces
 ```
 
-Example:
+#### Example Command:
 
 ```
 python3 createOutputFiles.py \
 --classname base \
 --classid vec00179 \
 --mgiza_output ./SynSemClass_Ger_Extension/input_files/en_de_mini.dict.A3.final.part000 \
---input_trg ./SynSemClass_Ger_Extension/input_files/paracrawl5m.de \
---input_src ./SynSemClass_Ger_Extension/input_files/paracrawl5m.en \
+--input_trg ./SynSemClass_Ger_Extension/input_files/paracrawl.de \
+--input_src ./SynSemClass_Ger_Extension/input_files/paracrawl.en \
 --list arrange,assemble,base,build,construct,create,develop
 ```
+
+Explanation:
 
 - -cn, --classname: include verb classname
 
@@ -114,7 +119,7 @@ python3 createOutputFiles.py \
 * -i2, --input_trg: the path to the input file with target language -> file before lemmatization or lowercasing
 *  -l, --list: comma-delimited list input (no spaces)
 
-For --list, include english verbs belonging to the class as comma-separated list (no spaces). To create the list, you can:
+For `--list`, include english verbs belonging to the class as comma-separated list (no spaces). To create the list, you can:
 
 - - go to source code of synsemclass website, search for
 
@@ -122,7 +127,7 @@ For --list, include english verbs belonging to the class as comma-separated list
 
   - copy list of english verbs + IDs
 
-  - serialize english verbs as list without id's via cml, in our example:
+  - you can serialize english verbs as list without id's via commandline using this example as template:
 
 ```
 echo "ask (EngVallex-ID-ev-w141f2), inquire (EngVallex-ID-ev-w1710f1), interview (EngVallex-ID-ev-w1741f1), poll (EngVallex-ID-ev-w2324f1), question (EngVallex-ID-ev-w2465f2)" | sed 's/([^()]*)//g' | tr -d ' '
