@@ -9,7 +9,10 @@ The repository provides scripts for:
 
 ## 1. Preprocessing
 
+#### Split file into two files
+
 Using the paracrawl dataset, you can split the tab-separated file into two files using the command line: 
+
 ```
 cut -f1 -d$'\t' file.txt> output-file.txt 
 cut -f2 -d$'\t' file.txt> output-file.txt
@@ -20,12 +23,16 @@ cut -f1 -d$'\t' en-de.txt> paracrawl.de
 cut -f2 -d$'\t' en-de.txt> paracrawl.en
 ```
 
+#### Reduce filesize (optional)
+
 Because of potential memory issues, it is recommended to reduce the size of dataset, example to 20mio lines:
 
 ```
 head -n 20000000 paracrawl.de > paracrawl.de
 head -n 20000000 paracrawl.en > paracrawl.en
 ```
+
+#### Filter non-sentences
 
 Filter corpus for lines not ending with a dot (titles, chopped sentences, other parts from websites) and lines including more than one sentence:
 
@@ -39,10 +46,12 @@ In our example:
 python preprocCorpus.py --input_src paracrawl.en --input_trg paracrawl.de
 ```
 
-
+#### Further preprocessing (tokenizing and lowercasing)
 
 For further preprocessing (tokenizing and lowercasing) the files we recommend to follow the tutorial: https://fabioticconi.wordpress.com/2011/01/17/how-to-do-a-word-alignment-with-giza-or-mgiza-from-parallel-corpus/.  
 Save the preprocessed files inside ./dataset folder. 
+
+
 
 ## 2. Word Alignment with MGIZA Tool
 For working with MGIZA, you can continue to follow the tutorial or use our Dockerfile.
@@ -55,7 +64,7 @@ docker run -it --rm mgiza-tool
 
 If you use the Dockerfile, you need to adjust: 
 
-* in Dockerfile: The local path to the /dataset directory with input files in line: ``COPY $local_dir /mgiza/mgizapp/bin``. This is line only necessary when the folder is not mounted 
+* in Dockerfile: The local path to the ./dataset directory with input files in line: ``COPY $local_dir /mgiza/mgizapp/bin``. This is line only necessary when the folder is not mounted 
 
   (``docker run -v /dataset:/mgiza/mgizapp/bin -it --rm mgiza-tool . `` (not tested yet)) 
 
@@ -65,7 +74,7 @@ If you use the Dockerfile, you need to adjust:
 
 ## 3. Creating a Basic Output with Most Common Word Alignments: 
 
-The file findWord.py takes the MGIZA output-files and creates a table with the most frequent alignments from English to German verbs (threshold 0.2%). You can use the file via CL:  
+`findWord.py` takes the MGIZA output-files and creates a table with the most frequent alignments from English to German verbs (threshold 0.2%). You can use the file via CL:  
 
 ```
 python3 findWord.py -c $PATH_TO_MGIZA_OUTPUT_FILE -w $VERB
@@ -81,11 +90,11 @@ python3 findWord.py -c ./output/en_de.dict.A3.final.part000 -w absorb
 
 #### Overview and Output Files
 
-For the SynSemClass project, we need two output files for one synonym class. The file `createOutputFiles.py` takes the MGIZA output-file and filtered corpus files and creates: 
+For the SynSemClass project, we need two output files per synonym class. `createOutputFiles.py` takes the MGIZA output-file and filtered corpus files and creates: 
 
-1. a file with most common word alignments: `candidate_verbs_{VERB_NAME}_{CLASS_NAME}.txt`
-2. a file with verbs and candidate example sentences:  `candidate_sentences_{EN-VERB_NAME}_{CLASS_NAME}.txt`
-3. a logfile `logfile_{classname}_{class_id}.txt`
+1. a file with most common word alignments: `candidate_verbs_{VERB_NAME}_{CLASS_NAME}.csv`
+2. a file with verbs and candidate example sentences:  `candidate_sentences_{EN-VERB_NAME}_{CLASS_NAME}.csv`
+3. a logfile `logfile_{classname}_{class_id}.csv`
 
 
 
@@ -118,20 +127,20 @@ python3 createOutputFiles.py \
 - -cn, --classname: include verb classname
 
 * -cid, --classid: include classid vec00XXX
-* -mo, --mgiza_output: path to mgiza output file
-* -i1, --input_src: the path to the input file with source language -> file before lemmatization or lowercasing
-* -i2, --input_trg: the path to the input file with target language -> file before lemmatization or lowercasing
-*  -l, --list: comma-delimited list input (no spaces)
+* -mo, --mgiza_output: path to mgiza output dictionary
+* -i1, --input_src: the path to the input file with source language (corpus before tokenization or lowercasing)
+* -i2, --input_trg: the path to the input file with target language (corpus before tokenization or lowercasing)
+*  -l, --list: comma-delimited list input with no spaces
 
-For `--list`, include english verbs belonging to the class as comma-separated list (no spaces). To create the list, you can:
 
-- - go to source code of synsemclass website, search for
 
-     `<span class="cms_label" title="Classmembers for class"...`
+For `--list`, include those English verbs belonging to the class as comma-separated list (no spaces). To create the list, you can:
 
-  - copy list of english verbs + IDs
+	- go to source code of synsemclass website, search for tag`<span class="cms_label" title="Classmembers for class"...`
 
-  - you can serialize english verbs as list without id's via commandline using this example as template:
+- copy list of english verbs + IDs
+
+- you can serialize english verbs as list without id's via commandline using this example as template:
 
 ```
 echo "ask (EngVallex-ID-ev-w141f2), inquire (EngVallex-ID-ev-w1710f1), interview (EngVallex-ID-ev-w1741f1), poll (EngVallex-ID-ev-w2324f1), question (EngVallex-ID-ev-w2465f2)" | sed 's/([^()]*)//g' | tr -d ' '
