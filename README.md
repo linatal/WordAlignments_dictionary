@@ -19,8 +19,8 @@ cut -f2 -d$'\t' file.txt> output-file.txt
 ```
 In our case: 
 ```
-cut -f1 -d$'\t' en-de.txt> paracrawl.de
 cut -f2 -d$'\t' en-de.txt> paracrawl.en
+cut -f1 -d$'\t' en-de.txt> paracrawl.de
 ```
 
 #### Reduce filesize (optional)
@@ -136,7 +136,7 @@ python3 createOutputFiles.py \
 
 For `--list`, include those English verbs belonging to the class as comma-separated list (no spaces). To create the list, you can:
 
-	- go to source code of synsemclass website, search for tag`<span class="cms_label" title="Classmembers for class"...`
+- go to source code of synsemclass website, search for tag`<span class="cms_label" title="Classmembers for class"...`
 
 - copy list of english verbs + IDs
 
@@ -146,4 +146,4 @@ For `--list`, include those English verbs belonging to the class as comma-separa
 echo "ask (EngVallex-ID-ev-w141f2), inquire (EngVallex-ID-ev-w1710f1), interview (EngVallex-ID-ev-w1741f1), poll (EngVallex-ID-ev-w2324f1), question (EngVallex-ID-ev-w2465f2)" | sed 's/([^()]*)//g' | tr -d ' '
 ```
 
-TODO: Maybe we can simplify this step by including a list of class-ids + verbs ??
+TODO: simplify this step by including a list of class-ids + verbs ??
