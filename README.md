@@ -29,7 +29,7 @@ cut -f1 -d$'\t' en-de.txt> paracrawl.de
 
 ### Reduce filesize (optional)
 
-Because of potential memory issues, it is recommended to reduce the size of dataset, example to 20mio lines:
+Because of potential memory issues, it is recommended to reduce the size of dataset, for example to 20mio lines:
 
 ```
 head -n 20000000 paracrawl.de > paracrawl.de
@@ -52,13 +52,13 @@ python preprocCorpus.py --input_src paracrawl.en --input_trg paracrawl.de
 
 ### Further preprocessing (tokenizing and lowercasing)
 
-For further preprocessing (tokenizing and lowercasing) the files we recommend to follow the tutorial: <https://fabioticconi.wordpress.com/2011/01/17/how-to-do-a-word-alignment-with-giza-or-mgiza-from-parallel-corpus/>.  
-Save the preprocessed files inside ./dataset folder.
+For further preprocessing the files (tokenizing and lowercasing) we recommend to follow the tutorial: <https://fabioticconi.wordpress.com/2011/01/17/how-to-do-a-word-alignment-with-giza-or-mgiza-from-parallel-corpus/>.  
+Save the preprocessed files inside the ./dataset folder.
 
 ## 2. Word Alignment with MGIZA Tool
 
 For working with MGIZA, you can continue to follow the tutorial or use our Dockerfile.
-The Dockerfile takes the preprocessed input files, makes classes, installs and compiles MGIZA and finally, creates the word alignments.
+The Dockerfile takes the preprocessed input files, makes classes, installs and compiles MGIZA and, finally, creates the word alignments.
 
 ```
 docker build -f Dockerfile -t mgiza-tool . 
@@ -67,23 +67,23 @@ docker run -it --rm mgiza-tool
 
 If you use the Dockerfile, you need to adjust:
 
-* in Dockerfile: The local path to the ./dataset directory with input files in line: ``COPY $local_dir /mgiza/mgizapp/bin``. This is line only necessary when the folder is not mounted
+* in Dockerfile: The local path to the ./dataset directory with input files in line: ``COPY $local_dir /mgiza/mgizapp/bin``. This is only necessary if the folder is not mounted
 
-  (``docker run -v /dataset:/mgiza/mgizapp/bin -it --rm mgiza-tool .`` (not tested yet))
+  ``docker run -v /dataset:/mgiza/mgizapp/bin -it --rm mgiza-tool .``
 
-* in Dockerfile: Input file names (we used `paracrawl.en` for English as source language and `paracrawl.de` for German as target language).  
+* in Dockerfile: Input file names (for example, we used `paracrawl.en` for English as source language and `paracrawl.de` for German as target language).  
 
-* Inside `configfile.txt`, you need to adjust the file-names, too. In the line “ncpus”, you can set the number of CPUs you want to use for processing.
+* Adjust the file-names in `configfile.txt`: in line “ncpus”, set the number of CPUs you want to use for processing.
 
 ## 3. Creating a Basic Output with Most Common Word Alignments
 
-`findWord.py` takes the MGIZA output-files and creates a table with the most frequent alignments from English to German verbs (threshold 0.2%). You can use the file via CL:  
+`findWord.py` takes the MGIZA output-files and creates a table with the most frequent alignments from English to German (threshold 0.2%). You can use the file via CL:  
 
 ```
 python3 findWord.py -c $PATH_TO_MGIZA_OUTPUT_FILE -w $VERB
 ```
 
-In our example, searching for the most often German alignments for the verb "absorb":
+In our example, searching for the most common German alignments for the verb "absorb":
 
 ```
 python3 findWord.py -c ./output/en_de.dict.A3.final.part000 -w absorb
@@ -93,7 +93,7 @@ python3 findWord.py -c ./output/en_de.dict.A3.final.part000 -w absorb
 
 ### Overview and Output Files
 
-For the SynSemClass project, we need two output files per synonym class. `createOutputFiles.py` takes the MGIZA output-file and filtered corpus files and creates:
+For the SynSemClass, we need two output files per synonym class. `createOutputFiles.py` takes the MGIZA output-file and filtered corpus files and creates:
 
 1. a file with most common word alignments: `candidate_verbs_{VERB_NAME}_{CLASS_NAME}.csv`
 2. a file with verbs and candidate example sentences:  `candidate_sentences_{EN-VERB_NAME}_{CLASS_NAME}.csv`
